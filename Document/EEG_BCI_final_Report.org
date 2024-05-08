@@ -154,11 +154,12 @@ In the subsequent stagese, a Multi-Layer Perceptron (MLP) emerges as a pivotal c
 
 * 5. Results and Evaluation:
 #+CAPTION:show t-SNE visualizations showing the clustering of low- and high-relevance Reading Embeddings
-[[file:../Figures/Results_fig/Reading_embeddings.png]
+[[file:../Figures/Results/Reading_embeddings.png]]
 #+CAPTION:show t-SNE visualizations showing the clustering of low- and high-relevance word  Embeddings
-[[file:../Figures/Word_Embedding_final.png]]
+[[file:../Figures/Results/Feature_embedding_from_EEG_EyeGaze.png]]
 
-[[file:../Figures/Confusion_matrix1.png]]
+[[file:../Figures/Results/Confusion_matrix_with_all_features.png]]
+
 
 * 6. Conclusion:
 
