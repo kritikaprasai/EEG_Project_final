@@ -14,8 +14,9 @@
     - [[#Model Architecture][Model Architetcure]]
     - [[#Implementation Details][Implementation Details]]
 - [[#Results and Evaluation][Results and Evaluation]]
-- [[#Challenges][Challenges]]
 - [[#Conclusion][Conclusion]]
+  - [[#Challenges][Challenges]]
+  - [[#Ethical consideration and privacy concerns][Ethical consideration and privacy concerns]]
 - [[#Future Works][Future Works]]
 - [[#Code Description][Code Description]]
 - [[#Refrences][References]]
@@ -72,46 +73,65 @@ The Zurich Cognitive Language Processing Corpus (ZuCo) is a valuable resource fo
 
 * 2.1.1 Data Preprocessing: Eye Tracking
 
-* Data Acquisition: Eye position and pupil size were recorded using an EyeLink 1000 Plus tracker at 500 Hz.
-* Calibration: The eye tracker was calibrated with a 9-point grid before each paradigm, ensuring accuracy of gaze data.
-* Preprocessing:
-  Saccades were detected based on velocity and acceleration thresholds.
-  Fixations were defined as periods without saccades.
-  Blinks were identified as periods with zero pupil diameter or zero gaze positions.
-  Fixations within the boundaries of each displayed word were extracted for analysis.
-* Feature Extraction:
-  Gaze duration (GD), total reading time (TRT), first fixation duration (FFD), single fixation duration (SFD), and go-past time (GPT) were extracted for each word.
-  Pupil size was computed for each of these eye-tracking features.
-  Number of fixations and mean pupil size were extracted for each word and sentence.
-* Gaussian Mixture Model:
-  A Gaussian mixture model was trained on gaze data for each sentence to improve allocation of fixations to text lines.
-  Exclusion Criteria: Fixations shorter than 100 ms were excluded from the analyses, as they are unlikely to be relevant for reading.
+- Data Acquisition: Eye position and pupil size were recorded using an EyeLink 1000 Plus tracker at 500 Hz.
+- Calibration: The eye tracker was calibrated with a 9-point grid before each paradigm, ensuring accuracy of gaze data.
+- Preprocessing:
+  + Saccades were detected based on velocity and acceleration thresholds.
+  + Fixations were defined as periods without saccades.
+  + Blinks were identified as periods with zero pupil diameter or zero gaze positions.
+  + Fixations within the boundaries of each displayed word were extracted for analysis.
+- Feature Extraction:
+  + Gaze duration (GD), total reading time (TRT), first fixation duration (FFD), single fixation duration (SFD), and go-past time (GPT) were extracted for each word.
+  + Pupil size was computed for each of these eye-tracking features.
+  + Number of fixations and mean pupil size were extracted for each word and sentence.
+- Gaussian Mixture Model:
+  + A Gaussian mixture model was trained on gaze data for each sentence to improve allocation of fixations to text lines.
+  + Exclusion Criteria: Fixations shorter than 100 ms were excluded from the analyses, as they are unlikely to be relevant for reading.
   
 * 2.1.2 Data Pre-processing: EEG data
 
-* Data Acquisition: EEG data were recorded using 105 scalp electrodes and 9 EOG channels.
-* Preprocessing Steps:
-  EEG data were imported into MATLAB and triggers/latencies were extracted.
-  Bad electrodes were identified and replaced based on the EEGLab plugin clean_rawdata.
-  EEG data were high-pass filtered at 0.5 Hz and notch filtered at 49-51 Hz.
-  Eye artifacts were removed by regressing EOG channels from scalp EEG channels.
-  MARA algorithm was used for automatic artifact rejection.
-  Bad electrodes were interpolated using spherical spline interpolation.
-  EEG and eye-tracking data were synchronized.
-* Frequency Band Analysis:
-  Band-pass filtering was applied to extract data for five frequency bands.
-  Hilbert transform was used to compute the amplitude of each frequency band.
-* Feature Extraction:
-  EEG features were extracted based on sentence-level and fixation-based time segments from eye-tracking data.
-  Artifact Rejection:Trials with transient noise exceeding 90μV were excluded.
+- Data Acquisition: EEG data were recorded using 105 scalp electrodes and 9 EOG channels.
+- Preprocessing Steps:
+   + EEG data were imported into MATLAB and triggers/latencies were extracted.
+   + Bad electrodes were identified and replaced based on the EEGLab plugin clean_rawdata.
+   + EEG data were high-pass filtered at 0.5 Hz and notch filtered at 49-51 Hz.
+   + Eye artifacts were removed by regressing EOG channels from scalp EEG channels.
+   + MARA algorithm was used for automatic artifact rejection.
+   + Bad electrodes were interpolated using spherical spline interpolation.
+   + EEG and eye-tracking data were synchronized.
+- Frequency Band Analysis:
+   + Band-pass filtering was applied to extract data for five frequency bands.
+   + Hilbert transform was used to compute the amplitude of each frequency band.
+- Feature Extraction:
+   + EEG features were extracted based on sentence-level and fixation-based time segments from eye-tracking data.
+   + Artifact Rejection:Trials with transient noise exceeding 90μV were excluded.
 
 * 3. Literature Review:
 
+Our method builds upon the innovative foundations laid out in three pivotal papers:
+ 
+** DeWave: Discrete EEG Waves Encoding for Brain Dynamics to Text Translation:
+Translating brain dynamics into natural language holds immense significance for advancing brain-computer interfaces (BCIs), especially with the rapid progress of large language models like ChatGPT. Traditional EEG decoding techniques mainly focus on classifying original EEG waves into distinct categories, which are not sufficient to broaden-based brain-computer communication. DeWave bridges the gap between EEG and natural language general representation. DeWave adopted a vectorized variational Encoder to embed the EEG waves into a distinct codex encoding. It also introduced a large-scale pretrained large language model to decode the indexing codex presentation into natural language text. DeWave can be applied to both the world-level EEG features and Raw EEG features which can outperform other models.
+ 
+** LaBraM: Large brain model for learning generic representations with tremendous EEG data in BCI:
+While DeWave appears to be at the forefront of decoding EEG signals into natural language text, its reliance on the encoding method for presenting EEG waves underscores its significance for downstream task analysis. Establishing a universal approach to processing and presenting EEG waves is a crucial endeavor. Leveraging the success of large language models in text processing, we propose the concept of a Unified Language-based Brain Model (LaBraM), aimed at overcoming representation limitations across various datasets and tasks in BCI through unsupervised pretraining. Utilizing vector-quantized neural spectrum prediction, we train a semantically rich neural tokenizer capable of encoding continuous raw EEG channel patches into compact neural codes, incorporating both temporal and spatial embedding information into the final representation. Evaluation across more than 20 datasets spanning diverse tasks demonstrates the robust generalization of EEG signal presentation afforded by LaBraM.
+ 
+** LLM: From word embedding to reading embedding using Large Language Model, EEG and Eye-tracking:
+
+Understanding written text, a fundamental cognitive skill critical for acquiring knowledge, poses a multifaceted challenge, with a significant number of learners struggling to achieve proficiency. Researchers should explore innovative tasks for Brain-Computer Interfaces (BCI) that predict the relevance of words or tokens to target inference words. Unlike DeWave and LaBraM, this study introduces a novel BCI task aimed at distinguishing EEG and eye-gaze patterns as subjects engage in reading comprehension. Leveraging AI agents, particularly Large Language Models (LLMs), enhances text comprehension. It introduces a reading embedding representation that integrates EEG and eye-gaze biomarkers using attention-based mechanisms. This model evaluates the relevance of words or tokens to inference task questions, classifying them as high or low. Training utilizes insights from LLMs, guided by algorithm-based prompt engineering. This pioneering work integrates EEG with eye-tracking data to predict comprehensive reading tasks at the word level, further refined with LLM guidance for word embedding, achieving over 90% accuracy even without specific information about the reading tasks.
 
 * 4. Methods and Materials:
 
 * 4.1 Model Pipeline:
 
+** Phase 1: Unveiling Thoughts Through Text
+The primary objective of this intricate two-phase model is to address the captivating challenge associated with the translation of brain activity into textual form, followed by the subsequent analysis of its underlying sentiment. Within the initial phase, the primary emphasis lies on the intricate process of deciphering sentences derived from EEG signals.
+Delving into the intricacies of the training regimen within the model, the focus shifts towards the right side, particularly highlighting the EEG-to-text decoding mechanism. In this stage, meticulously preprocessed EEG data, meticulously segmented into distinct frequency bands and meticulously converted into word-level characteristics, assumes the role of the model's primary input. Stepping into the limelight is a multi-layered transformer encoder, positioned at the core of this process. By meticulously processing the series of characteristics through its numerous layers in a repetitive manner, the encoder gradually acquires an understanding of the contextual correlations existing among these features, akin to how humans comprehend the significance of words based on their contextual positioning within a sentence. Each individual layer takes into account the prevailing feature while simultaneously acknowledging its interconnection with all others, thereby constructing an all-encompassing portrayal of the encoded brain activity.
+Subsequently, this intricate representation undergoes a transformation into a lower-dimensional realm, thereby giving rise to a condensed variant identified as "hidden projection dimension" or "EEG embeddings." These embeddings encapsulate the most pivotal details derived from the sequence of brain activity. The adeptly pre-trained BART decoder, renowned for its proficiency in natural language processing tasks and text generation, assumes a pivotal role in the subsequent steps. Leveraging these EEG embeddings, the decoder meticulously generates text one token at a time, be it a word or a sub-word unit.
+The training phase entails a meticulous comparison between the generated tokens and a predefined set of target tokens, which inherently represent the actual sentences correlating to the initial EEG data. This comparative analysis enables the model to adjust its internal parameters, thereby minimizing the disparities between the generated and target tokens. Through this iterative learning process, the model gradually enhances its capability to decode coherent and meaningful sentences from the encoded brain activity.
+
+** Phase 2: Sentiment Classification - A Downstream Task
+The coherent sentences decoded during the initial phase pave the way for an array of diverse downstream tasks, with sentiment classification serving as a prime example. Upon decoding, the resultant sentence is seamlessly integrated into a proficiently pre-trained sentiment classifier, responsible for categorizing the emotional undertones of the sentence, thereby classifying it as positive, negative, or neutral. It is imperative to underscore the significance of the accuracy of the EEG-to-text translation during the initial phase, as the efficacy of sentiment classification, alongside other downstream tasks, is inherently reliant on the precision and fidelity of this initial translation process.
 
 [[file:../Figures/EEG_to_Text_Decoding.png]]
 
@@ -135,3 +155,30 @@ In the subsequent stagese, a Multi-Layer Perceptron (MLP) emerges as a pivotal c
 
 #+CAPTION:show t-SNE visualizations showing the clustering of low- and high-relevance word  Embeddings
 [[file:../Figures/Word_embeddings3.png]]
+
+* 6. Conclusion:
+
+Ablation Study for EEG to Text Task: The primary objective of this project was to conduct an ablation study for the EEG to text task, taking insights from existing research while exploring modified versions of our own methodologies. 
+Building on Published Research: By building upon published research works in the field of EEG-based natural language processing, we aimed to dissect the contributions of various components and techniques employed in the literature, studying their individual impacts on the performance of the EEG to text translation task.
+Exploration of Modified Approaches: In addition to replicating and analysing existing methodologies, we are working on modifying certain aspects of the EEG to text pipeline based on our understanding and intuition, seeking potential enhancements or novel insights.
+Insights Gained: Through systematic experimentation and comparative analysis, we gained valuable insights into the relative importance and effectiveness of different components such as feature extraction methods, model architectures, and training strategies in the context of EEG-based text generation.
+
+* 6.1. Challenges:
+
+In EEG-to-text NLP projects, the primary challenge lies in the quality of EEG datasets and the substantial signal-to-noise content, which varies between subjects and data collection environments. Inter-subject variability presents a significant hurdle, as EEG signals can exhibit notable differences across individuals. This variability complicates the creation of generalized models capable of accurately translating EEG signals into text across diverse populations
+
+Additionally, reproducing findings from research papers such as "Open Vocabulary Electroencephalography-To-Text Decoding and Zero-shot Sentiment Classification" reveals shortcomings in baseline model performance. This baseline model lacks an efficient EEG embedding methodology and fails to integrate EEG features effectively with NLP tokens. Therefore, our focus is on enhancing baseline methods by introducing better read embedding techniques and refining the model's ability to distinguish between high and low relevance texts.While the read embeddings model effectively captures important features and yields promising results in distinguishing between high and low relevance texts, seamlessly merging this model with the EEG-to-text downstream task presents its own set of challenges.
+
+One big challenge is making sure that the things learned by the read embeddings model and the EEG features work well together.These two modalities encode information in distinct ways and hence, ensuring that the learned representations complement each other and contribute smoothly to the decoding process requires careful consideration.
+
+* 6.2. Ethical consideration and privacy concerns:
+- Informed Consent: Ensure participants are fully informed about the data collection process, potential risks, and how their data will be used before engaging in EEG data collection for BCI
+  applications.
+- Data Security: Implement robust encryption and data anonymization techniques to protect EEG data from unauthorized access or misuse.
+- Privacy Preservation: Develop strategies to minimize the risk of re-identification when handling EEG data, such as aggregating data or using differential privacy techniques.
+- Bias and Fairness: Mitigate bias in BCI models by ensuring diverse and representative training data, as biased models can perpetuate inequalities, especially in healthcare applications.
+- Data Ownership: Clarify ownership rights and responsibilities regarding EEG data between researchers, participants, and institutions to prevent exploitation or unauthorized use.
+- Regulatory Compliance: Adhere to relevant data protection regulations and ethical guidelines governing the collection, storage, and usage of EEG data, such as GDPR or institutional review board
+  (IRB) requirements.
+
+
