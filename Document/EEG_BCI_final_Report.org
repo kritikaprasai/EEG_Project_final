@@ -64,13 +64,13 @@ When it comes to reading and thinking, EEG provides valuable insights into the u
 - Medical applications: EEG-based text decoding can aid in diagnosing and monitoring neurological disorders such as epilepsy, sleep disorders, and cognitive impairments.
 - Assistive technology: Decoding EEG to text can be used to develop assistive technologies that enhance communication and quality of life for individuals with disabilities.
 
-2. Dataset:
+* 2. Dataset:
   
-2.1 Zuco Dataset Description:
+* 2.1 Zuco Dataset Description:
 
 The Zurich Cognitive Language Processing Corpus (ZuCo) is a valuable resource for studying language processing, incorporating simultaneous eye-tracking and electroencephalography (EEG) data during natural reading and linguistic annotation tasks. ZuCo 2.0, introduced in the paper "ZuCo 2.0: A dataset of simultaneous EEG and eye-tracking recordings during natural reading" by P. Lüdtke et al., expands upon its predecessor, ZuCo 1.0, with additional data and improved methodologies. Comprising 739 sentences, ZuCo 2.0 includes 349 sentences from standard reading paradigms and 390 from task-specific linguistic annotation tasks. These tasks involve participants actively seeking specific semantic relations within sentences. The dataset provides comprehensive insights into cognitive processes during language comprehension, offering researchers a rich resource to explore the neural correlates of reading and linguistic processing. Moreover, ZuCo 2.0 complements ZuCo 1.0 by enhancing the breadth and depth of available data, facilitating more robust analyses and discoveries in the field of cognitive neuroscience and natural language processing. The zuco dataset can be downloaded from below link: [[https://osf.io/2urht/wiki/home/][Zuco_dataset_link]]
 
-2.4.1 Data Preprocessing: Eye Tracking
+* 2.1.1 Data Preprocessing: Eye Tracking
 
 * Data Acquisition: Eye position and pupil size were recorded using an EyeLink 1000 Plus tracker at 500 Hz.
 * Calibration: The eye tracker was calibrated with a 9-point grid before each paradigm, ensuring accuracy of gaze data.
@@ -87,7 +87,7 @@ The Zurich Cognitive Language Processing Corpus (ZuCo) is a valuable resource fo
   A Gaussian mixture model was trained on gaze data for each sentence to improve allocation of fixations to text lines.
   Exclusion Criteria: Fixations shorter than 100 ms were excluded from the analyses, as they are unlikely to be relevant for reading.
   
-2.4.2 Data Pre-processing: EEG data
+* 2.1.2 Data Pre-processing: EEG data
 
 * Data Acquisition: EEG data were recorded using 105 scalp electrodes and 9 EOG channels.
 * Preprocessing Steps:
@@ -105,19 +105,17 @@ The Zurich Cognitive Language Processing Corpus (ZuCo) is a valuable resource fo
   EEG features were extracted based on sentence-level and fixation-based time segments from eye-tracking data.
   Artifact Rejection:Trials with transient noise exceeding 90μV were excluded.
 
-3. Literature Review:
+* 3. Literature Review:
 
 
-3. Methods and Materials:
+* 4. Methods and Materials:
 
-3.1 Model Pipeline:
-
-
-
-3.2 Modification for Embedding Layer:
+* 4.1 Model Pipeline:
 
 
-3.3 Implementation Details:
+[[file:../Figures/EEG_to_Text_Decoding.png]]
+
+* 4.2 Reading Embedding Model:
 
 A BERT-based transformer model is effectively leveraged to acquire token representations, a process that stands at the core of NLP tasks. These acquired representations undergo a normalization process using L2 normalization techniques. Through this process, every individual word is meticulously embedded into a 768-dimensional vector, consequently giving rise to a tensor characterized by dimensions of [N × M × 768], wherein N denotes the total count of sentences while M signifies the maximum number of words within a sentence. In order to maintain uniformity and coherence across all sentences, a padding mechanism is systematically employed to address any fluctuations in sentence length that may arise.
  
@@ -129,7 +127,9 @@ Diverging from the conventional concatenation approach, each unique feature unde
  
 In the subsequent stagese, a Multi-Layer Perceptron (MLP) emerges as a pivotal component, serving as the bedrock for predicting the probabilities linked to input samples being affiliated with a specific label within the overarching context of this binary classification task. This methodological approach, characterized by its comprehensive nature, ensures a meticulous and thorough integration of both eye-gaze and EEG features, thereby paving the way for a nuanced and in-depth analysis of behavioral patterns.
 
-3.4 Results and Evaluation:
+[[file:../Figures/Modified_embedding_method.png]]
+
+* 5. Results and Evaluation:
 #+CAPTION:show t-SNE visualizations showing the clustering of low- and high-relevance Reading Embeddings
 [[file:../Figures/Results_fig/Reading_embeddings.png]]
 
