@@ -140,7 +140,7 @@ The coherent sentences decoded during the initial phase pave the way for an arra
 * 4.2 Reading Embedding Model:
 
 #+ATTR_ORG: :width 300 :height 200 :center
-file:../Figures/Modified_embedding_method.png
+[[file:../Figures/Modified_embedding_method.png]]
 
 A BERT-based transformer model is effectively leveraged to acquire token representations, a process that stands at the core of NLP tasks. These acquired representations undergo a normalization process using L2 normalization techniques. Through this process, every individual word is meticulously embedded into a 768-dimensional vector, consequently giving rise to a tensor characterized by dimensions of [N × M × 768], wherein N denotes the total count of sentences while M signifies the maximum number of words within a sentence. In order to maintain uniformity and coherence across all sentences, a padding mechanism is systematically employed to address any fluctuations in sentence length that may arise.
  
